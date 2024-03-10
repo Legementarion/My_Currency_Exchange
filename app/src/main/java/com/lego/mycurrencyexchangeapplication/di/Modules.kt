@@ -4,12 +4,16 @@ import com.lego.mycurrencyexchangeapplication.data.CurrencyApi
 import com.lego.mycurrencyexchangeapplication.data.CurrencyRepositoryImpl
 import com.lego.mycurrencyexchangeapplication.data.RetrofitFactory
 import com.lego.mycurrencyexchangeapplication.domain.CurrencyRepository
+import com.lego.mycurrencyexchangeapplication.presentation.CurrencyViewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import retrofit2.Retrofit
 
 val appModule = module {
     single<CurrencyRepository> { CurrencyRepositoryImpl(get()) }
-    single<Retrofit>{ RetrofitFactory().createClient() }
-    single<CurrencyApi> { RetrofitFactory().service }
+
+    single { RetrofitFactory() }
+    single<CurrencyApi> { get<RetrofitFactory>().getCurrencyApi() }
+
+    viewModel { CurrencyViewModel(get()) }
 
 }

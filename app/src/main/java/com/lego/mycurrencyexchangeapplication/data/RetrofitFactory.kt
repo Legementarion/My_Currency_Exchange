@@ -3,19 +3,24 @@ package com.lego.mycurrencyexchangeapplication.data
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitFactory {
+class RetrofitFactory() {
 
-    private lateinit var retrofit: Retrofit
-
-    fun createClient(): Retrofit {
-        retrofit = Retrofit.Builder()
-            .baseUrl("https://rate.in.ua/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        return retrofit
+    companion object {
+        const val BASE_URL = "https://rate.in.ua"
     }
 
+    fun getCurrencyApi(): CurrencyApi {
+        return buildApi(CurrencyApi::class.java)
+    }
 
-    var service: CurrencyApi = retrofit.create(CurrencyApi::class.java)
+    private fun <Api> buildApi(
+        api: Class<Api>,
+    ): Api {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(api)
+    }
+
 }

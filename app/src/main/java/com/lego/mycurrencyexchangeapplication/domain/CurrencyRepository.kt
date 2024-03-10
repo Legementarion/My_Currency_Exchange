@@ -1,9 +1,10 @@
 package com.lego.mycurrencyexchangeapplication.domain
 
+import com.lego.mycurrencyexchangeapplication.data.models.Resource
 import com.lego.mycurrencyexchangeapplication.domain.models.Currencies
 
 interface CurrencyRepository {
 
-    fun getLastUpdate(): Result<Currencies>
+    suspend fun getLastUpdate(): Resource<Currencies>
 
 }

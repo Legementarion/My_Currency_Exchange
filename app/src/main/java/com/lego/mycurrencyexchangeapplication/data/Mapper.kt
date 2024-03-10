@@ -1,23 +1,26 @@
 package com.lego.mycurrencyexchangeapplication.data
 
-import com.lego.mycurrencyexchangeapplication.data.models.Exchangers
-import com.lego.mycurrencyexchangeapplication.data.models.Response
+import com.lego.mycurrencyexchangeapplication.data.models.CurrencyResponse
+import com.lego.mycurrencyexchangeapplication.data.models.Rates
 import com.lego.mycurrencyexchangeapplication.domain.models.Currencies
 import com.lego.mycurrencyexchangeapplication.domain.models.Currency
 
-fun Response.toDomain(): Currencies {
+fun CurrencyResponse.toDomain(): Currencies {
     return Currencies(
-        this.exchangers.toDomain(),
+        this.exchangers.first().rates?.toDomain() ?: emptyList(),
     )
 }
 
-fun List<Exchangers>.toDomain(): List<Currency> {
-    return this.map {
-        Currency(
-            it.name ?: "",
-            it.rates?.usd?.sell ?: "",
-            it.rates?.usd?.buy ?: ""
-        )
-    }
+fun Rates.toDomain(): List<Currency> {
+    val rateList = mutableListOf<Currency>()
+
+    usd?.let { rateList.add(Currency("usd", it.sell, it.buy)) }
+    eur?.let { rateList.add(Currency("eur", it.sell, it.buy)) }
+    rur?.let { rateList.add(Currency("rur", it.sell, it.buy)) }
+    gbp?.let { rateList.add(Currency("gbp", it.sell, it.buy)) }
+    chf?.let { rateList.add(Currency("chf", it.sell, it.buy)) }
+    pln?.let { rateList.add(Currency("pln", it.sell, it.buy)) }
+
+    return rateList
 }
 

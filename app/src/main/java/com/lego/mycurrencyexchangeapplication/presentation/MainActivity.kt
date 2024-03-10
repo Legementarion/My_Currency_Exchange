@@ -9,12 +9,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.compose.ui.tooling.preview.Preview
 import com.lego.mycurrencyexchangeapplication.ui.theme.MyCurrencyExchangeApplicationTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: CurrencyViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.update()
         setContent {
             MyCurrencyExchangeApplicationTheme {
                 // A surface container using the 'background' color from the theme
