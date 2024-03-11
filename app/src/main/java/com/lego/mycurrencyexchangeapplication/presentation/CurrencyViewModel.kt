@@ -1,5 +1,7 @@
 package com.lego.mycurrencyexchangeapplication.presentation
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lego.mycurrencyexchangeapplication.data.models.Resource
@@ -14,14 +16,13 @@ class CurrencyViewModel(
 ) : ViewModel() {
 
     var isLoading = false
-    val list = mutableListOf<Currency>() //
+    val list = MutableLiveData<List<Currency>>(emptyList())
 
     fun update() {
         viewModelScope.launch(Dispatchers.IO) {
             val result = currencyRepository.getLastUpdate()
             result.handleResponse(onSuccess = {
-                list.addAll(it.currencyList.toMutableList())
-                list
+                list.postValue(it.currencyList.toMutableList())
             })
         }
     }
